@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load filters %}
+{% block content %}
+    <title>StyleHub Academy</title>
+    <h1>Welcome to the Fashion Platform and Wellness Platform</h1>
+    <div class="grid-container">
+        {% for instance in page_obj %}
+            {% if instance|model_type == 'Course' %}
+                {% include 'core/partials/core_snippet.html' with core=instance %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% include 'partials/page_navigator.html' %}
+{% endblock content %}
