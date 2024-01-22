@@ -1,0 +1,12 @@
+@import "list-names";
+
+@function background-image($name) {
+  @return url("/photos/#{$name}.png") no-repeat;
+}
+
+
+@each $name in $list-names {
+  .bg-#{$name} {
+    background-image: background-image($name);
+  }
+}
