@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task 2</title>
+    <style>
+        .loading {
+            opacity: 0.2;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script type="application/javascript">
+        function addPostRow(data) {
+            const { id, title, author } = data;
+            $("body").append(
+                $("<p>").append(
+                    $("<span>").text(`Post created with id ${id}, title: ${title}, author: ${author}`)
+
+                )
+            )
+        }
+        function listPosts() {
+            const link = `http://localhost:3000/posts`
+            $.get(link, function (posts) {
+                posts.forEach(data => {
+                    addPostRow(data)
+                })
+
+            }).fail(function () {
+                alert("Server Error")
+            })
+        }
+
+        function buildForm() {
+            $("body").append(
+                $("<form>").append(
+                    $("<div>").append(
+                        $("<label>").attr({ for: "author" }).text("Author"),
+                        $("<input>").attr({ type: "text", id: "author" }),
+                    ),
+                    $("<div>").append(
+                        $("<label>").attr({ for: "title" }).text("Title"),
+                        $("<input>").attr({ type: "text", id: "title" }),
+                    ),
+                    $("<input>").attr({ type: "submit", value: "Submit" })
+                )
+                    .submit(function (e) {
+                        e.preventDefault();
+                        sendForm();
+                        return false;
+                    })
+            )
+        }
+
+        function sendForm() {
+            $("form").after(
+                $("<p>").text("About to send the query to the API")
+            )
+            const data = {
+                title: $("#title").val(),
+                author: $("#author").val()
+            }
+            const link = `http://localhost:3000/posts`
+            $.post(link, data, function (res) {
+                console.log(res)
+                addPostRow(res)
+            }).fail(function () {
+                alert("Error sending the POST query")
+            })
+        }
+        $(document).ready(function () {
+            listPosts()
+            buildForm()
+        })
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
